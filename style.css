@@ -1,0 +1,59 @@
+:root{
+    --main : rgb(255, 54, 54);
+    --accent : rgb(54, 255, 195);
+}
+
+*{
+    color: white;
+    font-family: 'Tilt Warp', cursive;
+}
+
+body,
+html{
+    background-color: black;
+    margin: 0;
+    height: 100%;
+}
+
+.h1{
+    height: 5rem;
+    position: relative;
+}
+
+h1{
+    transform: translatex(-50%);
+    font-size: 2rem;
+    position: absolute;
+    color: white;
+    font-family: 'Climate Crisis', cursive;
+    z-index: 1;
+}
+
+h1.holo-red{
+    user-select: none;
+    position: absolute;
+    transform: translate(calc(-50% - 5px), 2px);
+    color: var(--main);
+    z-index: 0;
+}
+h1.holo-blue{
+    user-select: none;
+    position: absolute;
+    color: var(--accent);
+    transform: translate(calc(-50% + 5px), -2px);
+    z-index: 0;
+}
+
+
+
+
+body{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.main{
+    flex: 1;
+}
+
