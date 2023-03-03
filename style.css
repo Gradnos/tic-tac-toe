@@ -57,3 +57,13 @@ body{
     flex: 1;
 }
 
+a{
+    transition-duration: 0.5s;
+    text-decoration: none;
+}
+
+a:hover{
+    letter-spacing: 2px;
+    color: var(--main);
+}
+
