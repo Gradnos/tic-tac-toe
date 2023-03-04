@@ -26,10 +26,10 @@ const gameBoard = (() =>{
             }
         }
     };
-    const setIcon = (xCoord, yCoord, icon) => {
+    const setIconByCoords = (xCoord, yCoord, icon) => {
+
         if(setIconOnBoard(xCoord,yCoord,icon) === Error) {return console.log("ERROR IN setIcon")}
         array[xCoord][yCoord] = icon;
-        console.table(array);
     };
     const setIconOnBoard = (xCoord, yCoord, icon) => {
         let url;
@@ -40,6 +40,19 @@ const gameBoard = (() =>{
         box.dataset.icon = icon;    
         box.style.backgroundImage= `url(${url})`;
         console.log(box);
+    };
+
+    const setIconByElement = (element, icon) =>{
+        let coords = getCoordsByElement(element);
+        setIconByCoords(coords.x, coords.y, icon)
+    };
+    
+    const getCoordsByElement = (element) =>{
+        console.log(element)
+        let dataCoords = element.dataset.coords;
+        let array = dataCoords.split("-");
+        let coords = {x:array[0],y:array[1]};
+        return coords;
     };
     
     const setBoxEvents = (element) => {
@@ -60,21 +73,41 @@ const gameBoard = (() =>{
 
     return{
         createEmptyArray,
-        setIcon,
+        setIconByCoords,
+        setIconByElement
     };
 })();
 
 
 
 
-const gameController = (() => {
-    const onPlayerClick = (element) =>{
-        console.log(element);
-    }
 
+const player = (playerName, icon) => {
+    const makeMove = (element) =>{
+        gameBoard.setIconByElement(element, icon);
+    }
+    return {
+        playerName,
+        icon,
+        makeMove,
+    }
+}
+
+
+let john = player("john", "x");
+let dog = player("dog", "o");
+let playerArr = [john,dog]
+gameBoard.createEmptyArray(3);
+
+const gameController = (() => {
+    let currentPlayedId = 0;
+    let currentPlayer = null;
+    const onPlayerClick = (element) =>{
+        currentPlayer = playerArr[currentPlayedId];
+        playerArr[currentPlayedId].makeMove(element);
+        currentPlayedId = (currentPlayedId + 1) % playerArr.length;
+    }
     return{
         onPlayerClick
     };
 })();
-
-gameBoard.createEmptyArray(3);
