@@ -21,24 +21,25 @@ const gameBoard = (() =>{
             for(let j = 0; j < arraySize; j++){
                 let newBox = document.createElement("div");
                 newBox.classList.add(boxStyle);
-                newBox.dataset.coordY = i;
-                newBox.dataset.coordX = j;
+                newBox.dataset.coords = `${i}-${j}`;
                 setMouseHoverFunction(newBox);
                 board.appendChild(newBox);
             }
         }
     };
     const setIcon = (xCoord, yCoord, icon) => {
-        array[yCoord][xCoord] = icon;
-        setIconOnBoard(xCoord,yCoord,icon);
+        if(setIconOnBoard(xCoord,yCoord,icon) === Error) {return console.log("ERROR IN setIcon")}
+        array[xCoord][yCoord] = icon;
+        console.table(array);
     };
     const setIconOnBoard = (xCoord, yCoord, icon) => {
         let url;
-        if(icon === "x"){ url = "";}
-        else if(icon === "o"){ url = "";}
-        
-
-        setIconOnBoard(xCoord,yCoord,icon);
+        if(icon === "x"){ url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrLmn8laj168RZaCgTrVF7co0kql_YPVIduA&usqp=CAU";}
+        else if(icon === "o"){ url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoWuEgC8RDM3VPl9EPhSzOGVAqS-1sKp_OZQ&usqp=CAU";}
+        else {return Error};
+        let box = board.querySelector(`[data-coords="${xCoord}-${yCoord}"]`)
+        box.style.backgroundImage= `url(${url})`;
+        console.log(box);
     };
     
     const setMouseHoverFunction = (element) => {
@@ -69,4 +70,4 @@ const gameController = (() => {
 
 })();
 
-//gameBoard.createEmptyArray(3);
+gameBoard.createEmptyArray(3);

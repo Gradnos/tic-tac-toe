@@ -82,6 +82,8 @@ a:hover{
 }
 
 .box{
+    background-repeat: no-repeat;
+    background-position: center;
     border: 1vmin solid white;
     transition-property: background-color ;
     transition: 0.3s ;
@@ -89,6 +91,6 @@ a:hover{
 
 .box.hovered{
     border-color: black;
-    border-width: calc(calc(var(--board-size) / var(--board-divisions)) * 0.5);
+    border-width: calc(calc(var(--board-size) / var(--board-divisions)) * 0.25);
 }
 
