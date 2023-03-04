@@ -1,6 +1,8 @@
 :root{
     --main : rgb(255, 54, 54);
-    --accent : rgb(54, 255, 195);
+    --accent : rgb(0, 247, 255);
+    --board-size : 70vmin;
+    --board-divisions : 1;
 }
 
 *{
@@ -21,6 +23,7 @@ html{
 }
 
 h1{
+    letter-spacing: calc(0.1rem + 1.2vw);
     transform: translatex(-50%);
     font-size: 2rem;
     position: absolute;
@@ -32,7 +35,7 @@ h1{
 h1.holo-red{
     user-select: none;
     position: absolute;
-    transform: translate(calc(-50% - 5px), 2px);
+    transform: translate(calc(-50% - 5px), 0px);
     color: var(--main);
     z-index: 0;
 }
@@ -40,7 +43,7 @@ h1.holo-blue{
     user-select: none;
     position: absolute;
     color: var(--accent);
-    transform: translate(calc(-50% + 5px), -2px);
+    transform: translate(calc(-50% + 5px), 0px);
     z-index: 0;
 }
 
@@ -54,6 +57,9 @@ body{
 }
 
 .main{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
     flex: 1;
 }
 
@@ -65,5 +71,17 @@ a{
 a:hover{
     letter-spacing: 2px;
     color: var(--main);
+}
+
+.board{
+    display: grid;
+    grid-template: repeat(var(--board-divisions),1fr) /  repeat(var(--board-divisions),1fr);
+    border: 5px solid white;
+    height: var(--board-size);
+    width: var(--board-size);
+}
+
+.box{
+    border: 5px solid white;
 }
 
