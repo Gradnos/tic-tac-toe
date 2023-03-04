@@ -76,7 +76,7 @@ a:hover{
 .board{
     display: grid;
     grid-template: repeat(var(--board-divisions),1fr) /  repeat(var(--board-divisions),1fr);
-    border: 1vmin solid white;
+    border: 2vmin solid white;
     height: var(--board-size);
     width: var(--board-size);
 }
@@ -84,18 +84,19 @@ a:hover{
 .box{
     background-repeat: no-repeat;
     background-position: center;
-    border: 1vmin solid white;
+    background-size: cover;
+    border: 2vmin solid white;
     transition-property: background-color ;
     transition: 0.3s ;
 }
 
 .box.hovered{
     border-color: black;
-    border-width: calc(calc(var(--board-size) / var(--board-divisions)) * 0.25);
+    border-width: calc(calc(var(--board-size) / var(--board-divisions)) * 0.5);
 }
 
 .box.hovered[data-icon]{
     border-color: rgb(0, 0, 0);
-    border-width: calc(calc(var(--board-size) / var(--board-divisions)) * 0.1);
+    border-width: calc(calc(var(--board-size) / var(--board-divisions)) * 0.2);
 }
 

@@ -33,8 +33,8 @@ const gameBoard = (() =>{
     };
     const setIconOnBoard = (xCoord, yCoord, icon) => {
         let url;
-        if(icon === "x"){ url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrLmn8laj168RZaCgTrVF7co0kql_YPVIduA&usqp=CAU";}
-        else if(icon === "o"){ url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoWuEgC8RDM3VPl9EPhSzOGVAqS-1sKp_OZQ&usqp=CAU";}
+        if(icon === "x"){ url = "./img/cross.svg";}
+        else if(icon === "o"){ url = "./img/circle.svg";}
         else {return Error};
         let box = board.querySelector(`[data-coords="${xCoord}-${yCoord}"]`)
         box.dataset.icon = icon;    
@@ -78,10 +78,6 @@ const gameBoard = (() =>{
     };
 })();
 
-
-
-
-
 const player = (playerName, icon) => {
     const makeMove = (element) =>{
         gameBoard.setIconByElement(element, icon);
@@ -94,20 +90,27 @@ const player = (playerName, icon) => {
 }
 
 
-let john = player("john", "x");
-let dog = player("dog", "o");
-let playerArr = [john,dog]
-gameBoard.createEmptyArray(3);
+
 
 const gameController = (() => {
     let currentPlayedId = 0;
     let currentPlayer = null;
+    let playerArr = [];
+    const startGame = () => {
+        playerArr.push(player("playe1", "x"));
+        playerArr.push(player("player2", "o"));
+        console.log(playerArr);
+        gameBoard.createEmptyArray(3);
+    };
     const onPlayerClick = (element) =>{
         currentPlayer = playerArr[currentPlayedId];
         playerArr[currentPlayedId].makeMove(element);
         currentPlayedId = (currentPlayedId + 1) % playerArr.length;
     }
+
+
     return{
+        startGame,
         onPlayerClick
     };
 })();
