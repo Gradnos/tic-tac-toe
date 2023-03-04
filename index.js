@@ -38,12 +38,14 @@ const gameBoard = (() =>{
         else if(icon === "o"){ url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoWuEgC8RDM3VPl9EPhSzOGVAqS-1sKp_OZQ&usqp=CAU";}
         else {return Error};
         let box = board.querySelector(`[data-coords="${xCoord}-${yCoord}"]`)
+        box.dataset.icon = icon;    
         box.style.backgroundImage= `url(${url})`;
         console.log(box);
     };
     
     const setMouseHoverFunction = (element) => {
         element.addEventListener("mouseenter", (e) =>{
+            if(e.target.hasAttribute("data-icon")) return;
             hoveredBox = e.target;
             e.target.classList.add("hovered");
         });
