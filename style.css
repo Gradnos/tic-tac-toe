@@ -76,12 +76,19 @@ a:hover{
 .board{
     display: grid;
     grid-template: repeat(var(--board-divisions),1fr) /  repeat(var(--board-divisions),1fr);
-    border: 5px solid white;
+    border: 1vmin solid white;
     height: var(--board-size);
     width: var(--board-size);
 }
 
 .box{
-    border: 5px solid white;
+    border: 1vmin solid white;
+    transition-property: background-color ;
+    transition: 0.3s ;
+}
+
+.box.hovered{
+    border-color: black;
+    border-width: calc(calc(var(--board-size) / var(--board-divisions)) * 0.5);
 }
 

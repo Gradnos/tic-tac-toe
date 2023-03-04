@@ -4,6 +4,7 @@ const gameBoard = (() =>{
     let arraySize = null;
     let r = document.documentElement;
     let boxStyle = "box";
+    let hoveredBox = null;
 
     const createEmptyArray = (size) => {
         array = new Array(size);
@@ -15,22 +16,57 @@ const gameBoard = (() =>{
         }
         fillBoard();
     };
-    const setIcon = (xCoord, yCoord, icon) => {
-        array[yCoord][xCoord] = icon;
-    };
     const fillBoard = () => {
-        for(let i = 0; i < arraySize*arraySize; i++){
-            let newBox = document.createElement("div");
-            newBox.classList.add(boxStyle);
-            board.appendChild(newBox);
+        for(let i = 0; i < arraySize; i++){
+            for(let j = 0; j < arraySize; j++){
+                let newBox = document.createElement("div");
+                newBox.classList.add(boxStyle);
+                newBox.dataset.coordY = i;
+                newBox.dataset.coordX = j;
+                setMouseHoverFunction(newBox);
+                board.appendChild(newBox);
+            }
         }
     };
+    const setIcon = (xCoord, yCoord, icon) => {
+        array[yCoord][xCoord] = icon;
+        setIconOnBoard(xCoord,yCoord,icon);
+    };
+    const setIconOnBoard = (xCoord, yCoord, icon) => {
+        let url;
+        if(icon === "x"){ url = "";}
+        else if(icon === "o"){ url = "";}
+        
+
+        setIconOnBoard(xCoord,yCoord,icon);
+    };
+    
+    const setMouseHoverFunction = (element) => {
+        element.addEventListener("mouseenter", (e) =>{
+            hoveredBox = e.target;
+            e.target.classList.add("hovered");
+        });
+        element.addEventListener("mouseleave", (e) =>{
+            e.target.classList.remove("hovered");
+        });
+    }
+    const getHoveredBox = () =>{
+        return hoveredBox;
+    }
 
 
     return{
         createEmptyArray,
-        setIcon
+        setIcon,
+        getHoveredBox
     };
+})();
+
+
+
+
+const gameController = (() => {
+
 })();
 
 //gameBoard.createEmptyArray(3);
