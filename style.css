@@ -94,3 +94,8 @@ a:hover{
     border-width: calc(calc(var(--board-size) / var(--board-divisions)) * 0.25);
 }
 
+.box.hovered[data-icon]{
+    border-color: rgb(0, 0, 0);
+    border-width: calc(calc(var(--board-size) / var(--board-divisions)) * 0.1);
+}
+

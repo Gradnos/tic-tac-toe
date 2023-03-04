@@ -4,7 +4,6 @@ const gameBoard = (() =>{
     let arraySize = null;
     let r = document.documentElement;
     let boxStyle = "box";
-    let hoveredBox = null;
 
     const createEmptyArray = (size) => {
         array = new Array(size);
@@ -22,7 +21,7 @@ const gameBoard = (() =>{
                 let newBox = document.createElement("div");
                 newBox.classList.add(boxStyle);
                 newBox.dataset.coords = `${i}-${j}`;
-                setMouseHoverFunction(newBox);
+                setBoxEvents(newBox);
                 board.appendChild(newBox);
             }
         }
@@ -43,25 +42,25 @@ const gameBoard = (() =>{
         console.log(box);
     };
     
-    const setMouseHoverFunction = (element) => {
+    const setBoxEvents = (element) => {
+        element.addEventListener("click",(e) =>{
+            if(e.target.hasAttribute("data-icon")) return;
+            gameController.onPlayerClick(e.target);
+        });
         element.addEventListener("mouseenter", (e) =>{
+            e.target.classList.add("hovered");
             if(e.target.hasAttribute("data-icon")) return;
             hoveredBox = e.target;
-            e.target.classList.add("hovered");
         });
         element.addEventListener("mouseleave", (e) =>{
+
             e.target.classList.remove("hovered");
         });
     }
-    const getHoveredBox = () =>{
-        return hoveredBox;
-    }
-
 
     return{
         createEmptyArray,
         setIcon,
-        getHoveredBox
     };
 })();
 
@@ -69,7 +68,13 @@ const gameBoard = (() =>{
 
 
 const gameController = (() => {
+    const onPlayerClick = (element) =>{
+        console.log(element);
+    }
 
+    return{
+        onPlayerClick
+    };
 })();
 
 gameBoard.createEmptyArray(3);
