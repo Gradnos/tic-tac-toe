@@ -9,6 +9,7 @@
 *{
     color: white;
     font-family: 'Tilt Warp', cursive;
+    
 }
 
 body,
@@ -19,8 +20,14 @@ html{
 }
 
 .h1{
+    transition-duration: 1s;
     height: 5rem;
     position: relative;
+}
+
+.h1:hover{
+    scale: 1.1;
+    filter: sepia(100%) hue-rotate(540deg) saturate(900%);
 }
 
 h1{
@@ -68,6 +75,7 @@ a{
     transition-duration: 0.5s;
     text-decoration: none;
 }
+
 
 a:hover{
     filter: sepia(100%) hue-rotate(360deg) saturate(50000%);

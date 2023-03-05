@@ -2,6 +2,7 @@ const gameBoard = (() =>{
     let array = [];
     let board = document.querySelector(".board");
     let arraySize = null;
+    let freeSpaces =null;
     let r = document.documentElement;
     let boxStyle = "box";
 
@@ -9,6 +10,7 @@ const gameBoard = (() =>{
         array = new Array(size);
         board.innerHTML = "";
         arraySize = size;
+        freeSpaces  = arraySize * arraySize;
         r.style.setProperty("--board-divisions", size);
         for(let i = 0; i < size; i++){
             array[i] = new Array(size).fill(null);
@@ -32,6 +34,7 @@ const gameBoard = (() =>{
         array[xCoord][yCoord] = icon;
     };
     const setIconOnBoard = (xCoord, yCoord, icon) => {
+        freeSpaces--;
         let url;
         let deg;
         if(icon === "x"){ url = "./img/cross.svg"; deg = "520deg";}
@@ -41,8 +44,41 @@ const gameBoard = (() =>{
         r.style.setProperty("--hueDeg", deg);
         box.dataset.icon = icon;    
         box.style.backgroundImage= `url(${url})`;
-        
-        console.log(box);
+    
+    };
+
+    const checkWinner = () =>{
+        let winner = null;
+        for(let i=0; i < arraySize; i++){
+            if(array[i][0] !== null &&  array[i][0] == array[i][1] && array[i][0] == array[i][2]) {
+                winner = array[i][0];
+                return winner;
+            }
+        }
+
+        for(let i=0; i < arraySize; i++){
+            if(array[0][i] !== null &&  array[0][i] == array[1][i] && array[0][i] == array[2][i]) {
+                winner = array[0][i];
+                return winner;
+            }
+        }
+
+        if(array[0][0] !== null && array[0][0] === array[1][1] && array[0][0] === array[2][2])
+        {
+            winner = array[0][0];
+            return winner;
+        }
+
+        if(array[0][2] !== null && array[0][2] === array[1][1] && array[0][2] === array[2][0])
+        {
+            winner = array[0][2];
+            return winner;
+        }
+
+        if(freeSpaces === 0) winner = "tie";
+
+
+        return winner;
     };
 
     const setIconByElement = (element, icon) =>{
@@ -51,7 +87,6 @@ const gameBoard = (() =>{
     };
     
     const getCoordsByElement = (element) =>{
-        console.log(element)
         let dataCoords = element.dataset.coords;
         let array = dataCoords.split("-");
         let coords = {x:array[0],y:array[1]};
@@ -77,7 +112,8 @@ const gameBoard = (() =>{
     return{
         createEmptyArray,
         setIconByCoords,
-        setIconByElement
+        setIconByElement,
+        checkWinner
     };
 })();
 
@@ -97,19 +133,25 @@ const player = (playerName, icon) => {
 
 const gameController = (() => {
     let currentPlayedId = 0;
-    let currentPlayer = null;
+    let gameOngoing = false;
     let playerArr = [];
+    let winner = null;
     const startGame = () => {
+        gameOngoing = true;
         playerArr.push(player("playe1", "x"));
         playerArr.push(player("player2", "o"));
-        console.log(playerArr);
         gameBoard.createEmptyArray(3);
     };
     const onPlayerClick = (element) =>{
-        currentPlayer = playerArr[currentPlayedId];
+        if (!gameOngoing) return;
         playerArr[currentPlayedId].makeMove(element);
         currentPlayedId = (currentPlayedId + 1) % playerArr.length;
+        winner = gameBoard.checkWinner();
+        if(winner !== null){
+            gameOngoing = false;
+        }
     }
+
 
 
     return{
