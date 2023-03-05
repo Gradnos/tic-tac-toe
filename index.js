@@ -33,12 +33,15 @@ const gameBoard = (() =>{
     };
     const setIconOnBoard = (xCoord, yCoord, icon) => {
         let url;
-        if(icon === "x"){ url = "./img/cross.svg";}
-        else if(icon === "o"){ url = "./img/circle.svg";}
+        let deg;
+        if(icon === "x"){ url = "./img/cross.svg"; deg = "520deg";}
+        else if(icon === "o"){ url = "./img/circle.svg"; deg = "300deg"}
         else {return Error};
         let box = board.querySelector(`[data-coords="${xCoord}-${yCoord}"]`)
+        r.style.setProperty("--hueDeg", deg);
         box.dataset.icon = icon;    
         box.style.backgroundImage= `url(${url})`;
+        
         console.log(box);
     };
 
@@ -114,3 +117,5 @@ const gameController = (() => {
         onPlayerClick
     };
 })();
+
+gameController.startGame();

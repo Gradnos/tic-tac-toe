@@ -3,6 +3,7 @@
     --accent : rgb(0, 247, 255);
     --board-size : 70vmin;
     --board-divisions : 1;
+    --hueDeg : 0deg;
 }
 
 *{
@@ -69,6 +70,7 @@ a{
 }
 
 a:hover{
+    filter: sepia(100%) hue-rotate(360deg) saturate(50000%);
     letter-spacing: 2px;
     color: var(--main);
 }
@@ -91,12 +93,15 @@ a:hover{
 }
 
 .box.hovered{
-    border-color: black;
+
+    border-color: rgb(0, 0, 0);
+    filter: sepia(100%) hue-rotate(var(--hueDeg)) saturate(50000%);
     border-width: calc(calc(var(--board-size) / var(--board-divisions)) * 0.5);
+
 }
 
 .box.hovered[data-icon]{
-    border-color: rgb(0, 0, 0);
-    border-width: calc(calc(var(--board-size) / var(--board-divisions)) * 0.2);
+    border-color: rgb(255, 255, 255);
+    border-width: calc(calc(var(--board-size) / var(--board-divisions)) * 0.15);
 }
 
