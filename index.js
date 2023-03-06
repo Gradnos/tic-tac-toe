@@ -23,6 +23,7 @@ const gameBoard = (() =>{
                 let newBox = document.createElement("div");
                 newBox.classList.add(boxStyle);
                 newBox.dataset.coords = `${i}-${j}`;
+                newBox.draggable = false;
                 setBoxEvents(newBox);
                 board.appendChild(newBox);
             }
@@ -46,11 +47,21 @@ const gameBoard = (() =>{
         box.style.backgroundImage= `url(${url})`;
     
     };
+    const addWinningStyle = (...elements) =>{
+        elements.forEach(element => {
+            element.classList.add("winning-line");
+        });
+    };
+
+    const getElementByCoords = (x,y) =>{
+        return board.querySelector(`[data-coords="${x}-${y}"]`)
+    }
 
     const checkWinner = () =>{
         let winner = null;
         for(let i=0; i < arraySize; i++){
             if(array[i][0] !== null &&  array[i][0] == array[i][1] && array[i][0] == array[i][2]) {
+                addWinningStyle(getElementByCoords(i,0), getElementByCoords(i,1), getElementByCoords(i,2));
                 winner = array[i][0];
                 return winner;
             }
@@ -58,6 +69,7 @@ const gameBoard = (() =>{
 
         for(let i=0; i < arraySize; i++){
             if(array[0][i] !== null &&  array[0][i] == array[1][i] && array[0][i] == array[2][i]) {
+                addWinningStyle(getElementByCoords(0,i), getElementByCoords(1,i), getElementByCoords(2,i));
                 winner = array[0][i];
                 return winner;
             }
@@ -65,12 +77,14 @@ const gameBoard = (() =>{
 
         if(array[0][0] !== null && array[0][0] === array[1][1] && array[0][0] === array[2][2])
         {
+            addWinningStyle(getElementByCoords(0,0), getElementByCoords(1,1), getElementByCoords(2,2));
             winner = array[0][0];
             return winner;
         }
 
         if(array[0][2] !== null && array[0][2] === array[1][1] && array[0][2] === array[2][0])
         {
+            addWinningStyle(getElementByCoords(0,2), getElementByCoords(1,1), getElementByCoords(2,0));
             winner = array[0][2];
             return winner;
         }
@@ -132,12 +146,14 @@ const player = (playerName, icon) => {
 
 
 const gameController = (() => {
-    let currentPlayedId = 0;
+    let currentPlayedId;
     let gameOngoing = false;
-    let playerArr = [];
-    let winner = null;
+    let playerArr;
+    let winner;
     const startGame = () => {
         gameOngoing = true;
+        playerArr = [];
+        currentPlayedId = 0;
         playerArr.push(player("playe1", "x"));
         playerArr.push(player("player2", "o"));
         gameBoard.createEmptyArray(3);

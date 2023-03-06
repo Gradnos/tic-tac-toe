@@ -72,6 +72,7 @@ body{
 }
 
 a{
+    font-weight: 1000;
     transition-duration: 0.5s;
     text-decoration: none;
 }
@@ -111,5 +112,13 @@ a:hover{
 .box.hovered[data-icon]{
     border-color: rgb(255, 255, 255);
     border-width: calc(calc(var(--board-size) / var(--board-divisions)) * 0.15);
+}
+
+.box.winning-line{
+    background-color: var(--main);
+}
+
+.box.hovered.winning-line{
+    filter: none;
 }
 
