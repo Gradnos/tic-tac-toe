@@ -1,7 +1,3 @@
-/*  <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Climate+Crisis&family=Tilt+Warp&display=swap" rel="stylesheet"> */
-
 
 const gameBoard = (() =>{
     let array = [];
@@ -62,6 +58,41 @@ const gameBoard = (() =>{
         return board.querySelector(`[data-coords="${x}-${y}"]`)
     }
 
+
+    const checkWinnerBoard = (array , freeSpaces) =>{
+        let winner = null;
+        for(let i=0; i < arraySize; i++){
+            if(array[i][0] !== null &&  array[i][0] == array[i][1] && array[i][0] == array[i][2]) {
+                winner = array[i][0];
+                return winner;
+            }
+        }
+
+        for(let i=0; i < arraySize; i++){
+            if(array[0][i] !== null &&  array[0][i] == array[1][i] && array[0][i] == array[2][i]) {
+                winner = array[0][i];
+                return winner;
+            }
+        }
+
+        if(array[0][0] !== null && array[0][0] === array[1][1] && array[0][0] === array[2][2])
+        {
+            winner = array[0][0];
+            return winner;
+        }
+
+        if(array[0][2] !== null && array[0][2] === array[1][1] && array[0][2] === array[2][0])
+        {
+            winner = array[0][2];
+            return winner;
+        }
+
+        if(freeSpaces === 0) winner = "tie";
+
+
+        return winner;
+    };
+
     const checkWinner = () =>{
         let winner = null;
         for(let i=0; i < arraySize; i++){
@@ -100,6 +131,100 @@ const gameBoard = (() =>{
         return winner;
     };
 
+    let count;
+
+    const getAiMove = () =>{
+
+        count = 0;
+        let BoardClone = [];
+        let thisIcon = "o";
+
+        for (let i = 0; i < array.length; i++) BoardClone[i] = array[i].slice();
+
+        let bestScore = Infinity;
+        let bestmove;
+
+
+        let freeBoardSpaces = freeArraySpaces(BoardClone);
+        freeBoardSpaces.forEach(space => {
+            BoardClone[space[0]][space[1]] = thisIcon;
+            let score = minmax(BoardClone, 0, false);
+            console.log(`${space[0]};${space[1]} --- score : ${score}`);
+           // console.log(`${space[0]} / ${space[1]} -- ${score}`);
+            if(score < bestScore){
+
+                bestScore = score;
+                bestmove = [space[0], space[1]];
+            }
+            BoardClone[space[0]][space[1]] = null;
+        });
+
+
+        return bestmove;
+
+    }
+
+    const minmax = (board, depth, isMaxing ) =>{
+        let string = "";
+        for(k = 0; k<= depth; k++){
+            string+= "_";
+        }
+        
+
+        let freeBoardSpaces = freeArraySpaces(board);
+        let winner = checkWinnerBoard(board , freeBoardSpaces.length);
+        let thisIcon;
+        let bestScore;
+
+        if(winner!==null){
+            count++;
+            if(winner === "tie") return 0;
+            if(winner === "x") return 10 - depth;
+            if(winner === "o") return -10 + depth;
+        }
+
+
+
+        if(isMaxing) {
+            thisIcon = "o"
+            bestScore = (Infinity);
+        }
+        else {
+            thisIcon = "x";
+            bestScore = -Infinity;
+        }
+        
+
+        freeBoardSpaces.forEach(space => {
+            board[space[0]][space[1]] = thisIcon;
+            let score = minmax(board, depth+1, !isMaxing);
+            if (depth === 0) console.log(`-----${space[0]}/${space[1]}  ---   ${score}`);
+            if(isMaxing){
+                bestScore = Math.min(score, bestScore);
+            } else{
+                bestScore = Math.max(score, bestScore);
+            }
+
+            board[space[0]][space[1]] = null;
+        });
+
+
+
+        return bestScore;
+
+    };
+
+    const freeArraySpaces = (array) =>{
+        let freeSpaces = [];
+        for(i=0; i< array.length; i++){
+            for(j=0; j< array[i].length; j++){
+                if(array[i][j] === null) freeSpaces.push([i,j]);
+            }
+        }
+        
+        return freeSpaces;
+    };
+
     const setIconByElement = (element, icon) =>{
         let coords = getCoordsByElement(element);
         setIconByCoords(coords.x, coords.y, icon)
@@ -132,7 +257,8 @@ const gameBoard = (() =>{
         createEmptyArray,
         setIconByCoords,
         setIconByElement,
-        checkWinner
+        checkWinner,
+        getAiMove
     };
 })();
 
@@ -142,6 +268,12 @@ const player = (playerName, icon) => {
     const makeMove = (element) =>{
         gameBoard.setIconByElement(element, icon);
     };
+
+    const makeAiMove = () =>{
+        let move = gameBoard.getAiMove();
+        gameBoard.setIconByCoords(move[0], move[1], icon);
+    };
+
     const resetScore = ()=>{
         score = 0;
         displayScore();
@@ -161,7 +293,8 @@ const player = (playerName, icon) => {
         icon,
         resetScore,
         scoreAdd,
-        makeMove
+        makeMove,
+        makeAiMove
     }
 }
 
@@ -169,10 +302,15 @@ const player = (playerName, icon) => {
 
 
 const gameController = (() => {
-    let currentPlayedId;
+    let currentPlayerId;
     let matchOngoing = false;
     let playerArr;
     let winner;
+    let pvp = true;
+    
+    let newMatchButton = document.querySelector(".newMatch");
+    let gameChoices = document.querySelectorAll(".choice");
+
     const startGame = () => {
         playerArr = [];
         playerArr.push(player("playe1", "x"));
@@ -181,16 +319,30 @@ const gameController = (() => {
     };
     const onPlayerClick = (element) =>{
         if (!matchOngoing) return;
-        playerArr[currentPlayedId].makeMove(element);
-        currentPlayedId = (currentPlayedId + 1) % playerArr.length;
+        playerArr[currentPlayerId].makeMove(element);
+        currentPlayerId = (currentPlayerId + 1) % playerArr.length;
         winner = gameBoard.checkWinner();
         if(winner !== null){
             finishMatch(winner);
+            return;
+        }
+
+
+        if(!pvp && playerArr[currentPlayerId].playerName === "player2"){
+            playerArr[currentPlayerId].makeAiMove();
+            currentPlayerId = (currentPlayerId + 1) % playerArr.length;
+            winner = gameBoard.checkWinner();
+            if(winner !== null){
+                finishMatch(winner);
+                return;
+            }
         }
     }
+
     const startMatch = () => {
+        newMatchButton.classList.add("hidden");
         matchOngoing = true;
-        currentPlayedId = 0;
+        currentPlayerId = 0;
         gameBoard.createEmptyArray(3);
     }
 
@@ -207,11 +359,28 @@ const gameController = (() => {
         } else {
             winner = "tie";
         }
+        newMatchButton.classList.remove("hidden");
     };
+
+    gameChoices.forEach(element => {
+        element.addEventListener("click", e =>{
+            if(e.target.classList.contains("selected")) return;
+            gameChoices.forEach(choice =>{
+                if(choice !== e.target) choice.classList.remove("selected");
+            });
+            e.target.classList.add("selected");
+            if(e.target.dataset.mode === "pvp") pvp = true;
+            else pvp = false;
+
+            startGame();
+        });
+    });
+
 
     return{
         startGame,
-        onPlayerClick
+        onPlayerClick,
+        startMatch
     };
 })();
 

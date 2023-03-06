@@ -113,6 +113,9 @@ a:hover{
 
 .right{
     margin-right: 2vmin;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
 }
 
 .score{
@@ -125,7 +128,8 @@ button{
     background-color: transparent;
     border: 2vmin solid white;
     color : white;
-    padding: 1rem;
+    padding: 1.2rem;
+    font-weight: 1000;
     font-size: 2rem;
     width: 50%;
     transition: 0.3s ;
@@ -133,15 +137,14 @@ button{
 
 button:hover{
     border-color: rgb(255, 255, 255);
-    filter: sepia(100%) hue-rotate(var(--hueDeg)) saturate(50000%);
-    border-width: 3vmin;
+    filter: sepia(100%) hue-rotate(var(--hueDeg)) saturate(5000%);
     scale: 1.05;
 }
 button:active{
     border-color: rgb(255, 255, 255);
     filter: sepia(100%) hue-rotate(calc(var(--hueDeg) * -1)) saturate(50000%);
     border-width: 3vmin;
-    scale: 0.95;
+    scale: 0.9;
 }
 
 .box{
@@ -173,4 +176,13 @@ button:active{
 
 .box.hovered.winning-line{
     filter: none;
+}
+
+.hidden{
+    display: none;
+}
+
+.selected{
+    background-color: white;
+    color: black;
 }
