@@ -306,7 +306,7 @@ const gameController = (() => {
     let matchOngoing = false;
     let playerArr;
     let winner;
-    let pvp = true;
+    let pvp = false;
     
     let newMatchButton = document.querySelector(".newMatch");
     let gameChoices = document.querySelectorAll(".choice");
