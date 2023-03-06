@@ -1,9 +1,9 @@
 :root{
     --main : rgb(255, 54, 54);
     --accent : rgb(0, 247, 255);
-    --board-size : 70vmin;
+    --board-size : 60vmin;
     --board-divisions : 1;
-    --hueDeg : 0deg;
+    --hueDeg : 520deg;
 }
 
 *{
@@ -59,14 +59,18 @@ h1.holo-blue{
 
 
 body{
+    
     align-items: center;
     display: flex;
     flex-direction: column;
 }
 
 .main{
-    display: flex;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
+    gap: 2vmin;
     justify-content: space-evenly;
     flex: 1;
 }
@@ -92,6 +96,54 @@ a:hover{
     width: var(--board-size);
 }
 
+.left,
+.right{
+        display: grid;
+        grid-template: repeat(3,1fr) / 1fr;
+        height: calc(var(--board-size) - 4vmin);
+        width: 1fr;
+}
+
+.left{
+    margin-left: 2vmin;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+}
+
+.right{
+    margin-right: 2vmin;
+}
+
+.score{
+    font-weight: 1000;
+    text-align: center;
+    font-size: 5rem
+}
+
+button{
+    background-color: transparent;
+    border: 2vmin solid white;
+    color : white;
+    padding: 1rem;
+    font-size: 2rem;
+    width: 50%;
+    transition: 0.3s ;
+}
+
+button:hover{
+    border-color: rgb(255, 255, 255);
+    filter: sepia(100%) hue-rotate(var(--hueDeg)) saturate(50000%);
+    border-width: 3vmin;
+    scale: 1.05;
+}
+button:active{
+    border-color: rgb(255, 255, 255);
+    filter: sepia(100%) hue-rotate(calc(var(--hueDeg) * -1)) saturate(50000%);
+    border-width: 3vmin;
+    scale: 0.95;
+}
+
 .box{
     background-repeat: no-repeat;
     background-position: center;
@@ -100,6 +152,7 @@ a:hover{
     transition-property: background-color ;
     transition: 0.3s ;
 }
+
 
 .box.hovered{
 
@@ -121,4 +174,3 @@ a:hover{
 .box.hovered.winning-line{
     filter: none;
 }
-

@@ -1,3 +1,8 @@
+/*  <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Climate+Crisis&family=Tilt+Warp&display=swap" rel="stylesheet"> */
+
+
 const gameBoard = (() =>{
     let array = [];
     let board = document.querySelector(".board");
@@ -37,9 +42,9 @@ const gameBoard = (() =>{
     const setIconOnBoard = (xCoord, yCoord, icon) => {
         freeSpaces--;
         let url;
-        let deg;
-        if(icon === "x"){ url = "./img/cross.svg"; deg = "520deg";}
-        else if(icon === "o"){ url = "./img/circle.svg"; deg = "300deg"}
+        let deg = "520deg";
+        if(icon === "x"){ url = "./img/cross.svg";}
+        else if(icon === "o"){ url = "./img/circle.svg";}
         else {return Error};
         let box = board.querySelector(`[data-coords="${xCoord}-${yCoord}"]`)
         r.style.setProperty("--hueDeg", deg);
