@@ -137,13 +137,31 @@ const gameBoard = (() =>{
 })();
 
 const player = (playerName, icon) => {
+    let score = 0;
+
     const makeMove = (element) =>{
         gameBoard.setIconByElement(element, icon);
+    };
+    const resetScore = ()=>{
+        score = 0;
+        displayScore();
+    };
+    const scoreAdd = (num) =>{
+        score += num;
+        displayScore();
     }
+    const displayScore = () =>{
+        let scoreDisplay = document.querySelector(`.score-${icon}`);
+        scoreDisplay.innerText = `${icon.toUpperCase()} : ${score}`;
+    }
+
+    displayScore();
     return {
         playerName,
         icon,
-        makeMove,
+        resetScore,
+        scoreAdd,
+        makeMove
     }
 }
 
@@ -152,28 +170,44 @@ const player = (playerName, icon) => {
 
 const gameController = (() => {
     let currentPlayedId;
-    let gameOngoing = false;
+    let matchOngoing = false;
     let playerArr;
     let winner;
     const startGame = () => {
-        gameOngoing = true;
         playerArr = [];
-        currentPlayedId = 0;
         playerArr.push(player("playe1", "x"));
         playerArr.push(player("player2", "o"));
-        gameBoard.createEmptyArray(3);
+        startMatch();
     };
     const onPlayerClick = (element) =>{
-        if (!gameOngoing) return;
+        if (!matchOngoing) return;
         playerArr[currentPlayedId].makeMove(element);
         currentPlayedId = (currentPlayedId + 1) % playerArr.length;
         winner = gameBoard.checkWinner();
         if(winner !== null){
-            gameOngoing = false;
+            finishMatch(winner);
         }
     }
+    const startMatch = () => {
+        matchOngoing = true;
+        currentPlayedId = 0;
+        gameBoard.createEmptyArray(3);
+    }
 
-
+    const finishMatch = (winnerIcon) =>{
+        matchOngoing = false;
+        let winner;
+        if (winnerIcon !== "tie"){
+            playerArr.forEach(player => {
+                if (player.icon === winnerIcon){
+                    winner = player;
+                    winner.scoreAdd(1);
+                }
+            });
+        } else {
+            winner = "tie";
+        }
+    };
 
     return{
         startGame,
